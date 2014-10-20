@@ -4,7 +4,6 @@
  * User: analhernandez
  */
 
-
 /**
  * Class Indeed
  * @package indeed
@@ -14,7 +13,6 @@
  * email: virtualjobfairfiu@gmail.com
  * password: cis49112014
  */
-
 
 class Indeed{
 
