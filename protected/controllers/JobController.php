@@ -33,8 +33,8 @@ class JobController extends Controller
 		
 	}
 	
-	public function actionHome($allWords = null, $phrase = null, $anyWord = null, $minus = null, $radioOption = null,
-                $city = null){
+	public function actionHome($allWords = null, $phrase = null, $anyWord = null, 
+                                  $minus = null, $radioOption = null, $city = null){
 
         $flag = 2;
         $mi = false;
@@ -81,18 +81,21 @@ class JobController extends Controller
         // calling indeed function
         if(isset($radioOption) && $radioOption != "" && $mi == false)
         {
+                        
             $result = $this->indeed($query, $city);
             if($result['totalresults'] == 0) {$result = "";}
-            $result2 = $this->careerBuilder($query, $city);
+            $result2 = $this->careerBuilder($query, $city);            
             if($result2[0] == 0) {$result2 = "";}
+            $result3 = $this->stackOverflow();
             // jobs -> careerPath, result -> Indeed, cbresults -> careerBuilder
-            $this->render('home', array('jobs'=>$job,'result'=>$result, 'cbresults'=>$result2, 'flag'=>$flag));
+            $this->render('home', array('jobs'=>$job,'result'=>$result, 'cbresults'=>$result2, 'result3'=>$result3,'flag'=>$flag));
         }
         else
         {
+            $result3 = $this->stackOverflow();
             $result = "";
             $result2 = "";
-            $this->render('home', array('jobs'=>$job, 'result'=>$result, 'cbresults'=>$result2,  'flag'=>$flag));
+            $this->render('home', array('jobs'=>$job, 'result'=>$result, 'cbresults'=>$result2,'result3'=>$result3,  'flag'=>$flag));
         }
 	}
 
@@ -162,6 +165,28 @@ class JobController extends Controller
         require_once 'protected/careerBuilder/cbapi.php';
         $results = careerBuilder\CBAPI::getJobResults($query, $city, "", "");
        // print_r($results);
+        return $results;
+    }
+    public function stackOverflow()
+    {
+        require_once 'protected/stackOverflow/StackOverflow.php';
+        $results = stackOverflow\StackOverflow::getJobResults();
+        foreach ($results as $job)
+        {
+            $new_job_posting = new Job();
+            $new_job_posting->FK_poster = 9;
+            $new_job_posting->post_date = $job->posted;
+            $new_job_posting->title = $job->title;
+            $new_job_posting->deadline = "";
+            $new_job_posting->description = $job->description;
+            $new_job_posting->type = "N/A";
+            $new_job_posting->compensation = "N/A";
+            $new_job_posting->save(false);
+        }
+       // print_r($results);
+        
+        
+        $results = Job::model()->findAllByAttributes(array('FK_poster'=>9));
         return $results;
     }
 

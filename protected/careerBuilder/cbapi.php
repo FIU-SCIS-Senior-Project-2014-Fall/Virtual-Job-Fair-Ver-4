@@ -92,7 +92,6 @@ class CBAPI {
         }catch(Exception $e){
             print_r($e);
         }
-
         $count = $xml->TotalCount;
         return $count;
     }
@@ -135,7 +134,8 @@ class CBAPI {
         $jobCount = $xml->LastItemIndex;
         $jobsCollection[0] = $jobCount;
 
-        foreach($xml->Results->JobSearchResult as $result) {
+        foreach($xml->Results->JobSearchResult as $result) 
+            {
             $currJob = new Job();
             $currJob->did = (string)$result->DID;
             $currJob->title = (string)$result->JobTitle;

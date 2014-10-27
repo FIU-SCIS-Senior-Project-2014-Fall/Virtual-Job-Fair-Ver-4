@@ -3,8 +3,9 @@
 class HomeController extends Controller
 {
 	public function actionStudentHome()
-	{
-		$username = Yii::app()->user->name;
+	{          
+            /////////////////////////////////////////////////////////////////
+                $username = Yii::app()->user->name;
 		$user = User::model()->find("username=:username",array(':username'=>$username)); // pass the user
 		$notification = Notification::model()->getNotificationId($user->id); // pass the notifications
 		$companies = CompanyInfo::getNames(); // pass the companies
@@ -38,7 +39,7 @@ class HomeController extends Controller
 		$countmessages = 0;
 		$countmisc =0;
 		foreach ($notification as $n) {
-					if ($n->importancy == 4 & $n->been_read == 0 ) {
+                        if ($n->importancy == 4 & $n->been_read == 0 ) {
 			$countvideo++;		
 			$key = VideoInterview::model()->findByAttributes(array('notification_id' => ($n->id + 1)));
 			if($key != null){

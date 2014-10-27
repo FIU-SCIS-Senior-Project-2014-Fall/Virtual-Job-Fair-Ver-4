@@ -6,10 +6,9 @@
 <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
 <!-- **** **** -->
 
-
 <?php
-$i = 0; $j = 0; $k = 0;
-$sizeJobs = 0; $sizeIndeed = 0; $sizeCB = 0 ;
+$i = 0; $j = 0; $k = 0; $m =0;
+$sizeJobs = 0; $sizeIndeed = 0; $sizeCB = 0;$sizeST =0;
 
 settype($size, "integer");
 if (!isset($_GET['allWords'])) {
@@ -298,15 +297,41 @@ function getURLParameter(name) {
             $sizeCB = $cbresults[0]; $k = 1;
             if($sizeCB == 1) {$sizeCB =2;}
         }
+        if($result3 != null & sizeof($result3) > 0)
+        {
+            $sizeST = 43;
+//            $sizeST = $result3[0]; $m = 1;
+//            if($sizeST == 1) {$sizeST=2;}
+        }
     ?>
     <tbody>
         <?php // There is only CareerPath jobs
-         if($j == $sizeIndeed && $k == $sizeCB && $sizeJobs > 0)
+         if($j == $sizeIndeed && $k == $sizeCB && $sizeJobs > 0 )
          {
-             foreach ($jobs as $job) {?>
+             foreach ($jobs as $job) 
+                 {?>
+             
+        <?php 
+        if($result3[$m]->FK_poster === 9)
+        { ?>
              <tr>
+                 <td><?php echo $job->type;?></td>
+                 <td><?php echo Yii::app()->dateFormatter->format('MM/dd/yyyy', $job->post_date);?></td>
+                 <td><?php echo $job->type;?></td>
+                 <td><?php echo $job->type;?></td>
+                 
+
+
+
+       <?php   $m++;}
+         else
+         { 
+         ?>    
+         
+        <tr>
                  <td><a href="/JobFair/index.php/job/view/jobid/<?php echo $job->id;?>"><?php echo $job->title;?></a></td>
-                 <td><a href="/JobFair/index.php/profile/employer/user/<?php echo User::model()->findByAttributes(array('id'=>$job->FK_poster))->username;?>"><?php echo CompanyInfo::model()->findByAttributes(array('FK_userid'=>$job->FK_poster))->name;?></a></td>
+                 <td><a href="/JobFair/index.php/profile/employer/user/<?php echo User::model()->findByAttributes(array('id'=>$job->FK_poster))->username;?>">
+   <!--                  <?php //echo CompanyInfo::model()->findByAttributes(array('FK_userid'=>$job->FK_poster))->name;?></a></td> -->
                  <td><?php echo $job->type;?></td>
                  <td><?php echo Yii::app()->dateFormatter->format('MM/dd/yyyy', $job->post_date);?></td>
 <!--                 <td>--><?php //echo Yii::app()->dateFormatter->format('MM/dd/yyyy', $job->deadline);?><!--</td>-->
@@ -336,10 +361,13 @@ function getURLParameter(name) {
                  </td>
                  <td><?php echo "CareerPath"?></td>
              </tr>
-            <?php }
+            <?php
+            }
+             }
          }
+         
          else{?>
-           <?php  while($j != $sizeIndeed || $k != $sizeCB || $i != $sizeJobs)
+           <?php  while($j != $sizeIndeed || $k != $sizeCB || $i != $sizeJobs || $m != $sizeST)
            {
                if($i < $sizeJobs) { ?> <!-- CareerPath -->
                    <tr>
@@ -462,8 +490,10 @@ function getURLParameter(name) {
                        </td>
                        <td><?php echo "Indeed"?></td>
                    </tr>
-              <?php $j++; }
-               if($k < $sizeCB && $sizeCB > 0){  ?>  <!-- CareerBuilder -->
+              <?php $j++;             
+                           }
+               if($k < $sizeCB && $sizeCB > 0)
+                   {  ?>  <!-- CareerBuilder -->
                 <tr>
                     <td><a href=<?php echo $cbresults[$k]->jobDetailsURL; ?> target="_blank">
                             <?php if($cbresults[$k]->title != null) {echo $cbresults[$k]->title;}
@@ -504,8 +534,57 @@ function getURLParameter(name) {
                         ?>
                     </td>
                     <td><?php echo "CareerBuilder"?></td>
+                </tr> <!--StackOverflow-->
+                <?php $k++;
+                } 
+                if($m < $sizeST && $sizeST > 0)
+                {  ?>  
+                <tr>
+                    <td><a href=<?php echo $result3[$m]->jobURL; ?> target="_blank">
+                            <?php if($result3[$m]->title != null) {echo $result3[$m]->title;}
+                            else {echo "N/A";}?></a></td>
+                    <td><?php if($result3[$m]->companyName != null) { echo $result3[$m]->companyName;}
+                        else {echo "N/A";}?></a></td>
+                    <td><?php if($result3[$m]->type != null) { echo $result3[$m]->type;}
+                        else {echo "N/A";}?></td>
+                    <td><?php if($result3[$m]->posted != null) {echo $result3[$m]->posted;}
+                        else {echo "N/A";} ?></td>
+<!--                    <td>N/A</td>-->
+                    <td><?php if($result3[$m]->pay != null) {echo '<small>'.$result3[$m]->pay.'</small>';}
+                        else {echo "N/A";} ?></td>
+                    <td>
+                        <?php
+                        if($result3[$m]->skills != null)
+                        {
+                            $in_skill_list = explode(' ', $result3[$m]->skills);
+                            $uniqueSkill = array_unique($in_skill_list);
+
+                            foreach ($uniqueSkill as $in_skill)
+                            {
+                                $this->widget('bootstrap.widgets.TbLabel', array(
+                                    'type'=>'default', // 'success', 'warning', 'important', 'info' or 'inverse'
+                                    'label'=>strtolower($in_skill),
+                                ));
+                                echo ' ';
+                            }
+                        }
+                        else
+                        {
+                            $this->widget('bootstrap.widgets.TbLabel', array(
+                                'type'=>'inverse', // 'success', 'warning', 'important', 'info' or 'inverse'
+                                'label'=>'N/A',
+                            ));
+                            echo ' ';
+                        }
+                        ?>
+                    </td>
+                    <td><?php echo "StackOverflow"?></td>
                 </tr>
-                <?php $k++; } ?>
+                <?php $m++; }
+                
+                
+                ?>
+                
           <?php }
          }
 
