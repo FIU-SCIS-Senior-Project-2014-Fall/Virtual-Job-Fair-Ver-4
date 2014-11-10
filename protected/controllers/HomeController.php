@@ -3,7 +3,19 @@
 class HomeController extends Controller
 {
 	public function actionStudentHome()
-	{          
+	{    
+            //$url = "http://careers.stackoverflow.com/jobs/feed?searchTerm=$keywords&location=$location&range=300&distanceUnits=Miles&allowsremote=true";
+            //$xml = simplexml_load_file($url);
+            //$os = "http://a9.com/-/spec/opensearch/1.1/";
+            //$xml->registerXPathNamespace('os','http://a9.com/-/spec/opensearch/1.1/');
+            //$nodes = $xml->xpath('os:totalResults');
+            //$count = $nodes[0];
+            //$count = (int)$xml->channel->children('os', true)->totalResults;
+            //var_dump($count);
+//            $skillset = Skillset::getNames();
+//            foreach($skillset as $s){
+//            echo $s." ";}
+            
             /////////////////////////////////////////////////////////////////
                 $username = Yii::app()->user->name;
 		$user = User::model()->find("username=:username",array(':username'=>$username)); // pass the user
@@ -174,245 +186,238 @@ class HomeController extends Controller
 
 	public function actionEmployersearch()
 	{
-		$srch_keyword = ($_POST['skillkeyword']); // Get skill keyword to search
-		$pieces = trim($srch_keyword);
-		$pieces = explode(" ", $pieces); // split words to search
-		$count = sizeof($pieces); // get number of word to search
-		$query = '';
-		for($i = 0; $i < $count;$i++) // prepare query
-		{
-			if ($i == $count - 1){
-				$query = $query.'name like \'%'.$pieces[$i].'%\'';
-			} else {
-				$query = $query.'name like \'%'.$pieces[$i].'%\' OR ';
-			}
+            $srch_keyword = ($_POST['skillkeyword']); // Get skill keyword to search
+            $pieces = trim($srch_keyword);
+            $pieces = explode(" ", $pieces); // split words to search
+            $count = sizeof($pieces); // get number of word to search
+            $query = '';
+            for($i = 0; $i<$count; $i++) // prepare query
+            {
+                if ($i == $count - 1){
+                    $query = $query.'name like \'%'.$pieces[$i].'%\'';
+                } else {
+                    $query = $query.'name like \'%'.$pieces[$i].'%\' OR ';
+                }
+            }
 
-		}
-		
-		$criteria = new CDbCriteria;
-		$criteria->condition = $query;
-		$results = Array();
+            $criteria = new CDbCriteria;
+            $criteria->condition = $query;
+            $results = Array();
 
-		if ($srch_keyword != null){
+            if ($srch_keyword != null){
+                $skillsArray = Skillset::model()->findAll($criteria);
+                foreach ($skillsArray as $sk)
+                {
+                    $student_ids = StudentSkillMap::model()->findAllByAttributes(array('skillid'=>$sk->id)); // search student skill map for students with that skill
+                    foreach ($student_ids as $tmp){
+                        $duplicate = 0;
+                        if (sizeof($results) > 0){
+                            foreach($results as $t){
+                                if ($t->id == $tmp->userid){
+                                    $duplicate = 1;
+                                }
+                            }
+                        }
+                        if ($duplicate == 0){
+                            $results[] = User::model()->findByAttributes(array('id'=>$tmp->userid));
+                        }
+                    }
+                }
+                $school_id = School::model()->findAll($criteria); // get school ID
+                foreach ($school_id as $si){
+                    $student_ids = Education::model()->findAllByAttributes(array('FK_school_id'=>$si->id)); // search educations with school ID
+                    foreach ($student_ids as $tmp){
+                        $duplicate = 0;
+                        if (sizeof($results) > 0){
+                            foreach($results as $t){
+                                if ($t->id == $tmp->FK_user_id){
+                                    $duplicate = 1;
+                                }
+                            }
+                        }
+                        if ($duplicate == 0){
+                            $results[] = User::model()->findByAttributes(array('id'=>$tmp->FK_user_id));
+                        }
+                    }
+                }
+            }
 
-			$skillsArray = Skillset::model()->findAll($criteria);
-			foreach ($skillsArray as $sk)
-			{
-				$student_ids = StudentSkillMap::model()->findAllByAttributes(array('skillid'=>$sk->id)); // search student skill map for students with that skill
-				foreach ($student_ids as $tmp){
-					$duplicate = 0;
-					if (sizeof($results) > 0){
-						foreach($results as $t){
-							if ($t->id == $tmp->userid){
-								$duplicate = 1;
-							}
-						}
-					}
+            if (isset($_GET['user'])){
+                    $username = $_GET['user'];
+            } else {
+                    $username = Yii::app()->user->name;
+            }
+            $user = User::model()->find("username=:username",array(':username'=>$username)); // pass user
+            $skills = Skillset::getNames(); // pass skills
+            $universites = School::getAllSchools(); // pass companies
 
-					if ($duplicate == 0){
-						$results[] = User::model()->findByAttributes(array('id'=>$tmp->userid));
-					}
-				}
-			}
+            // 		foreach ($results as $tr){
+            // 			print "<pre>"; print_r($tr->attributes);print "</pre>";
+            // 		}
+            // 		return;
 
-			$school_id = School::model()->findAll($criteria); // get school ID
-			foreach ($school_id as $si){
-				$student_ids = Education::model()->findAllByAttributes(array('FK_school_id'=>$si->id)); // search educations with school ID
-				foreach ($student_ids as $tmp){
-					$duplicate = 0;
-					if (sizeof($results) > 0){
-						foreach($results as $t){
-							if ($t->id == $tmp->FK_user_id){
-								$duplicate = 1;
-							}
-						}
-					}
-
-					if ($duplicate == 0){
-						$results[] = User::model()->findByAttributes(array('id'=>$tmp->FK_user_id));
-					}
-				}
-			}
-		}
-		
-		if (isset($_GET['user'])){
-			$username = $_GET['user'];
-		} else {
-			$username = Yii::app()->user->name;
-		}
-		$user = User::model()->find("username=:username",array(':username'=>$username)); // pass user
-		$skills = Skillset::getNames(); // pass skills
-		$universites = School::getAllSchools(); // pass companies
-
-		// 		foreach ($results as $tr){
-		// 			print "<pre>"; print_r($tr->attributes);print "</pre>";
-		// 		}
-		// 		return;
-		
-		$this->render('employerSearchResults', array('results'=>$results, 'skills'=>$skills, 'universities'=>$universites, 'user'=>$user));
+            $this->render('employerSearchResults', array('results'=>$results, 'skills'=>$skills, 'universities'=>$universites, 'user'=>$user));
 
 	}
 
 	public function actionSearch2()
 	{
-		$keyword = ($_GET['key']); // Get words to search
-		$pieces = trim($keyword);
-		$pieces = explode(" ", $pieces); // split words to search
-		$count = sizeof($pieces); // get number of word to search
-		$query = '';
-		for($i = 0; $i < $count;$i++) // prepare query
-		{
-			
-			if ($i == $count - 1){
-				$query = $query.'name =\''.$pieces[$i].'\'';
-			} else {
-				$query = $query.'name =\''.$pieces[$i].'\' OR ';
-			}	
-		}
+            $keyword = ($_GET['key']); // Get words to search
+            $pieces = trim($keyword);
+            $pieces = explode(" ", $pieces); // split words to search
+            $count = sizeof($pieces); // get number of word to search
+            $query = '';
+            for($i = 0; $i < $count;$i++) // prepare query
+            {
+                if ($i == $count - 1){
+                    $query = $query.'name =\''.$pieces[$i].'\'';
+                } else {
+                    $query = $query.'name =\''.$pieces[$i].'\' OR ';
+                }	
+            }
+
+            $criteria = new CDbCriteria;
+            $criteria->condition = $query;
+            $results = Array();
+
+            if ($keyword != null){
+                $skillsArray = Skillset::model()->findAll($criteria);
+                foreach ($skillsArray as $sk)
+                {
+                    if ($sk != null){
+                        $jobIds = JobSkillMap::model()->findAllByAttributes(array('skillid'=>$sk->id)); // get all jobs with that skill
+                        if ($jobIds != null) 
+                        {
+                            foreach ($jobIds as $ji)
+                            {
+                                if ($ji != null){
+                                    $jobid = $ji->jobid;
+                                    $duplicate = 0;
+                                    if (sizeof($results) > 0){
+                                        foreach($results as $t){
+                                            if ($t != null){
+                                                if (strcmp($t->id,$jobid) == 0){
+                                                    $duplicate = 1;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if ($duplicate == 0){
+                                        $results[] = Job::model()->findByAttributes(array('id'=>$jobid, 'active'=>'1'));	// search for skill only
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 	
-		$criteria = new CDbCriteria;
-		$criteria->condition = $query;
-		$results = Array();
-	
-		if ($keyword != null){
-			$skillsArray = Skillset::model()->findAll($criteria);
-			foreach ($skillsArray as $sk)
-			{
-				if ($sk != null){
-					$jobIds = JobSkillMap::model()->findAllByAttributes(array('skillid'=>$sk->id)); // get all jobs with that skill
-					if ($jobIds != null) {
-						foreach ($jobIds as $ji)
-						{
-							if ($ji != null){
-								$jobid = $ji->jobid;
-								$duplicate = 0;
-								if (sizeof($results) > 0){
-									foreach($results as $t){
-										if ($t != null){
-											if (strcmp($t->id,$jobid) == 0){
-												$duplicate = 1;
-											}
-										}
-									}
-								}
-									
-								if ($duplicate == 0){
-									$results[] = Job::model()->findByAttributes(array('id'=>$jobid, 'active'=>'1'));	// search for skill only
-								}
-							}
-						}
-	
-					}
-				}
-			}
-		}
-	
-		if (isset($_GET['user'])){
-			$username = $_GET['user'];
-		} else {
-			$username = Yii::app()->user->name;
-		}
-		$user = User::model()->find("username=:username",array(':username'=>$username)); // pass user
-		$skills = Skillset::getNames(); // pass skills
-		$companies = CompanyInfo::getNames(); // pass companies
-	
-		$this->render('studentSearchResults',array('results'=>$results,'user'=>$user,'companies'=>$companies,'skills'=>$skills,));
+            if (isset($_GET['user'])){
+                    $username = $_GET['user'];
+            } else {
+                    $username = Yii::app()->user->name;
+            }
+            $user = User::model()->find("username=:username",array(':username'=>$username)); // pass user
+            $skills = Skillset::getNames(); // pass skills
+            $companies = CompanyInfo::getNames(); // pass companies
+
+            $this->render('studentSearchResults',array('results'=>$results,'user'=>$user,'companies'=>$companies,'skills'=>$skills,));
 	
 	}
 	
 	
 	public function actionSearch()
 	{
-        $flag = 1;
-		$keyword = ($_POST['keyword']); // Get words to search
-		$pieces = trim($keyword);
-		$pieces = explode(" ", $pieces); // split words to search
-		$count = sizeof($pieces); // get number of word to search
-		$query = '';
-		for($i = 0; $i < $count;$i++) // prepare query
-		{
-			if ($i == $count - 1){
-				$query = $query.'name like \'%'.$pieces[$i].'%\'';
-			} else {
-				$query = $query.'name like \'%'.$pieces[$i].'%\' OR ';
-			}
+            $flag = 1;
+            $keyword = ($_POST['keyword']); // Get words to search
+            $pieces = trim($keyword);
+            $pieces = explode(" ", $pieces); // split words to search
+            $count = sizeof($pieces); // get number of word to search
+            $query = '';
+            for($i = 0; $i < $count;$i++) // prepare query
+            {
+                if ($i == $count - 1){
+                        $query = $query.'name like \'%'.$pieces[$i].'%\'';
+                } else {
+                        $query = $query.'name like \'%'.$pieces[$i].'%\' OR ';
+                }
 
-		}
+            }
 
-		$criteria = new CDbCriteria;
-		$criteria->condition = $query;
-		$results = Array();
+            $criteria = new CDbCriteria;
+            $criteria->condition = $query;
+            $results = Array();
 
-		if ($keyword != null){
-			$skillsArray = Skillset::model()->findAll($criteria);
-			foreach ($skillsArray as $sk)
-			{
-				if ($sk != null){
-					$jobIds = JobSkillMap::model()->findAllByAttributes(array('skillid'=>$sk->id)); // get all jobs with that skill
-					if ($jobIds != null) {
-						foreach ($jobIds as $ji)
-						{
-							if ($ji != null){
-								$jobid = $ji->jobid;
-								$duplicate = 0;
-								if (sizeof($results) > 0){
-									foreach($results as $t){
-										if ($t != null){
-											if (strcmp($t->id,$jobid) == 0){
-												$duplicate = 1;
-											}
-										}
-									}
-								}
-									
-								if ($duplicate == 0){
-									$results[] = Job::model()->findByAttributes(array('id'=>$jobid, 'active'=>'1'));	// search for skill only
-								}
-							}
-						}
+            if ($keyword != null)
+            {
+                $skillsArray = Skillset::model()->findAll($criteria);
+                foreach ($skillsArray as $sk)
+                {
+                    if ($sk != null)
+                    {
+                        $jobIds = JobSkillMap::model()->findAllByAttributes(array('skillid'=>$sk->id)); // get all jobs with that skill
+                        if ($jobIds != null) 
+                        {
+                            foreach ($jobIds as $ji)
+                            {
+                                if ($ji != null){
+                                    $jobid = $ji->jobid;
+                                    $duplicate = 0;
+                                    if (sizeof($results) > 0){
+                                        foreach($results as $t){
+                                            if ($t != null){
+                                                if (strcmp($t->id,$jobid) == 0){
+                                                        $duplicate = 1;
+                                                }
+                                            }
+                                        }
+                                    }
 
-					}
-				}
-			}
-				
-			
+                                    if ($duplicate == 0){
+                                        $results[] = Job::model()->findByAttributes(array('id'=>$jobid, 'active'=>'1'));	// search for skill only
+                                    }
+                                }
+                            }
 
-			$compsArray = CompanyInfo::model()->findAll($criteria);
-			foreach ($compsArray as $co){
-				if ($co != null){
-					$comp_posts = Job::model()->findAllByAttributes(array('FK_poster'=>$co->FK_userid));
-					if ($comp_posts != null){
-						foreach ($comp_posts as $cp){
-							$duplicate = 0;
-							if (sizeof($results) > 1){
-								if ($cp != null){
-									foreach($results as $t){
-										if ($t != null){
-											if ($t->id == $cp->id){
-												$duplicate = 1;
-											}
-										}
-									}
-								}
-							}
+                        }
+                    }
+                }
 
-							if ($duplicate == 0){
-								$results[] = Job::model()->findByAttributes(array('id'=>$cp->id, 'active'=>'1'));
-							}
-						}
-					}
-				}
-			}
-		}
+                $compsArray = CompanyInfo::model()->findAll($criteria);
+                foreach ($compsArray as $co){
+                    if ($co != null){
+                        $comp_posts = Job::model()->findAllByAttributes(array('FK_poster'=>$co->FK_userid));
+                        if ($comp_posts != null){
+                            foreach ($comp_posts as $cp){
+                                $duplicate = 0;
+                                if (sizeof($results) > 1){
+                                    if ($cp != null){
+                                        foreach($results as $t){
+                                            if ($t != null){
+                                                if ($t->id == $cp->id){
+                                                        $duplicate = 1;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if ($duplicate == 0){
+                                    $results[] = Job::model()->findByAttributes(array('id'=>$cp->id, 'active'=>'1'));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-		if (isset($_GET['user'])){
-			$username = $_GET['user'];
-		} else {
-			$username = Yii::app()->user->name;
-		}
-		$user = User::model()->find("username=:username",array(':username'=>$username)); // pass user
-		$skills = Skillset::getNames(); // pass skills
-		$companies = CompanyInfo::getNames(); // pass companies
+        if (isset($_GET['user'])){
+            $username = $_GET['user'];
+        } else {
+            $username = Yii::app()->user->name;
+        }
+        $user = User::model()->find("username=:username",array(':username'=>$username)); // pass user
+        $skills = Skillset::getNames(); // pass skills
+        $companies = CompanyInfo::getNames(); // pass companies
 
         $this->render('home',array('flag'=>$flag, 'results'=>$results,'user'=>$user,'companies'=>$companies,'skills'=>$skills,));
 		//$this->render('studentSearchResults',array('results'=>$results,'user'=>$user,'companies'=>$companies,'skills'=>$skills,));

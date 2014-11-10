@@ -7,8 +7,8 @@
 <!-- **** **** -->
 
 <?php
-$i = 0; $j = 0; $k = 0; $m =0;
-$sizeJobs = 0; $sizeIndeed = 0; $sizeCB = 0;$sizeST =0;
+$i = 0; $j = 0; $k = 0; $m = 0; $n = 0;
+$sizeJobs = 0; $sizeIndeed = 0; $sizeCB = 0;$sizeST = 0; $sizeMJ = 0;
 
 settype($size, "integer");
 if (!isset($_GET['allWords'])) {
@@ -262,9 +262,10 @@ function getURLParameter(name) {
  <?php if (isset($flag) && $flag == 2) { ?>
     <!-- ******* Job Postings from Job Page using external sources & Career Path *******  -->
     <table class="display" id="jobtable" style="max-width: 120%; width:100%">
-     <?php if ($jobs == null && $result == "" && $cbresults == ""){?>
-        <h3>Sorry, your search did not match any jobs </h3>
-        <br>
+     <?php if ($jobs == null && $result == "" && $cbresults == "" && $result3 =="" && $mjresults =="")
+         {?>
+         <h3>Sorry, your search did not match any jobs </h3>
+         <br>
          <strong>Search suggestions:</strong>
          <br>
          <ul type= "square">
@@ -297,41 +298,31 @@ function getURLParameter(name) {
             $sizeCB = $cbresults[0]; $k = 1;
             if($sizeCB == 1) {$sizeCB =2;}
         }
+        // gets how many job from StackOverflow
         if($result3 != null & sizeof($result3) > 0)
+        {   
+//            require_once 'protected/stackOverflow/StackOverflow.php';
+//            $sizeST = stackOverflow\StackOverflow::getJobCount("","Miami, Florida");
+            foreach($result3 as $job) { $sizeST++; }
+            //var_dump($sizeST);
+            $m = 1;
+        }
+        // gets how many job from Monster Jobs
+        if($mjresults != null & sizeof($mjresults)>0)
         {
-            $sizeST = 43;
-//            $sizeST = $result3[0]; $m = 1;
-//            if($sizeST == 1) {$sizeST=2;}
+            foreach($mjresults as $job) { $sizeMJ++; }
+            $n = 1;              
         }
     ?>
     <tbody>
         <?php // There is only CareerPath jobs
-         if($j == $sizeIndeed && $k == $sizeCB && $sizeJobs > 0 )
+         if($j == $sizeIndeed && $k == $sizeCB && $m == $sizeST && $n == $sizeMJ && $sizeJobs > 0 )
          {
              foreach ($jobs as $job) 
-                 {?>
-             
-        <?php 
-        if($result3[$m]->FK_poster === 9)
-        { ?>
+             {?>
              <tr>
-                 <td><?php echo $job->type;?></td>
-                 <td><?php echo Yii::app()->dateFormatter->format('MM/dd/yyyy', $job->post_date);?></td>
-                 <td><?php echo $job->type;?></td>
-                 <td><?php echo $job->type;?></td>
-                 
-
-
-
-       <?php   $m++;}
-         else
-         { 
-         ?>    
-         
-        <tr>
                  <td><a href="/JobFair/index.php/job/view/jobid/<?php echo $job->id;?>"><?php echo $job->title;?></a></td>
-                 <td><a href="/JobFair/index.php/profile/employer/user/<?php echo User::model()->findByAttributes(array('id'=>$job->FK_poster))->username;?>">
-   <!--                  <?php //echo CompanyInfo::model()->findByAttributes(array('FK_userid'=>$job->FK_poster))->name;?></a></td> -->
+                 <td><a href="/JobFair/index.php/profile/employer/user/<?php echo User::model()->findByAttributes(array('id'=>$job->FK_poster))->username;?>"><?php echo CompanyInfo::model()->findByAttributes(array('FK_userid'=>$job->FK_poster))->name;?></a></td>
                  <td><?php echo $job->type;?></td>
                  <td><?php echo Yii::app()->dateFormatter->format('MM/dd/yyyy', $job->post_date);?></td>
 <!--                 <td>--><?php //echo Yii::app()->dateFormatter->format('MM/dd/yyyy', $job->deadline);?><!--</td>-->
@@ -359,15 +350,15 @@ function getURLParameter(name) {
                         }
                     ?>
                  </td>
-                 <td><?php echo "CareerPath"?></td>
+                 <td><a href="/JobFair/index.php/job/view/jobid/<?php echo $jobs[$i]->id;?>">
+<img src="http://www.alumnicareerservices.org/Portals/0/FIU%20Career%20Services.png" width="125px" height="75px" alt="CareerPath"/>
+</a></td>
              </tr>
             <?php
             }
-             }
          }
-         
          else{?>
-           <?php  while($j != $sizeIndeed || $k != $sizeCB || $i != $sizeJobs || $m != $sizeST)
+           <?php  while($j != $sizeIndeed || $k != $sizeCB || $i != $sizeJobs || $m != $sizeST || $n != $sizeMJ)
            {
                if($i < $sizeJobs) { ?> <!-- CareerPath -->
                    <tr>
@@ -400,6 +391,7 @@ function getURLParameter(name) {
                        </td>
                        <td><?php echo "CareerPath"?></td>
                    </tr>
+                   
                <?php $i++; }
                if($j < $sizeIndeed && $sizeIndeed > 1){ ?> <!-- Indeed -->
                 <tr>
@@ -443,7 +435,7 @@ function getURLParameter(name) {
                         }
                         ?>
                     </td>
-                    <td><?php echo "Indeed"?></td>
+                    <td><?php echo "CareerPath"?></td>
                </tr>
                <!-- Indeed -->
                <?php $j++; }
@@ -488,18 +480,21 @@ function getURLParameter(name) {
                            }
                            ?>
                        </td>
-                       <td><?php echo "Indeed"?></td>
+                       <td><a href=<?php echo $results['result']['url']; ?> target="_blank">
+                           <img src="http://www.indeed.com/images/job_search_indeed.png" alt="Indeed"/>
+                           </a>
+                       </td>
                    </tr>
               <?php $j++;             
-                           }
+                }
                if($k < $sizeCB && $sizeCB > 0)
-                   {  ?>  <!-- CareerBuilder -->
+               {  ?>  <!-- CareerBuilder -->
                 <tr>
                     <td><a href=<?php echo $cbresults[$k]->jobDetailsURL; ?> target="_blank">
                             <?php if($cbresults[$k]->title != null) {echo $cbresults[$k]->title;}
                             else {echo "N/A";}?></a></td>
                     <td><?php if($cbresults[$k]->companyName != null) { echo $cbresults[$k]->companyName;}
-                        else {echo "N/A";}?></a></td>
+                        else {echo "N/A";}?></td>
                     <td><?php if($cbresults[$k]->type != null) { echo $cbresults[$k]->type;}
                         else {echo "N/A";}?></td>
                     <td><?php if($cbresults[$k]->posted != null) {echo $cbresults[$k]->posted;}
@@ -533,54 +528,103 @@ function getURLParameter(name) {
                         }
                         ?>
                     </td>
-                    <td><?php echo "CareerBuilder"?></td>
+                    <td><a href=<?php echo $cbresults[$k]->jobDetailsURL; ?> >
+                        <img src="http://www.wirestaurant.org/images/logo/CareerBuilder_300.gif" alt="CareerBuilder"/>
+                        </a></td>
                 </tr> <!--StackOverflow-->
                 <?php $k++;
                 } 
                 if($m < $sizeST && $sizeST > 0)
                 {  ?>  
                 <tr>
-                    <td><a href=<?php echo $result3[$m]->jobURL; ?> target="_blank">
-                            <?php if($result3[$m]->title != null) {echo $result3[$m]->title;}
-                            else {echo "N/A";}?></a></td>
+                    <td><a href=<?php echo $result3[$m]->jobURL;?> title="StackOverflow"><!--target="_blank"-->
+                        <?php if($result3[$m]->title != null) {echo $result3[$m]->title;}
+                              else {echo "N/A";}?></a></td>
                     <td><?php if($result3[$m]->companyName != null) { echo $result3[$m]->companyName;}
-                        else {echo "N/A";}?></a></td>
+                              else {echo "N/A";}?></a></td>
                     <td><?php if($result3[$m]->type != null) { echo $result3[$m]->type;}
-                        else {echo "N/A";}?></td>
+                              else {echo "N/A";}?></td>
                     <td><?php if($result3[$m]->posted != null) {echo $result3[$m]->posted;}
-                        else {echo "N/A";} ?></td>
+                              else {echo "N/A";} ?></td>
 <!--                    <td>N/A</td>-->
                     <td><?php if($result3[$m]->pay != null) {echo '<small>'.$result3[$m]->pay.'</small>';}
-                        else {echo "N/A";} ?></td>
-                    <td>
-                        <?php
-                        if($result3[$m]->skills != null)
-                        {
-                            $in_skill_list = explode(' ', $result3[$m]->skills);
-                            $uniqueSkill = array_unique($in_skill_list);
+                              else {echo "N/A";} ?></td>
+                    <td><?php if($result3[$m]->skills != null)
+                            {
+                                $in_skill_list = explode(' ', $result3[$m]->skills);
+                                $uniqueSkill = array_unique($in_skill_list);
 
-                            foreach ($uniqueSkill as $in_skill)
+                                foreach ($uniqueSkill as $in_skill)
+                                {
+                                    $this->widget('bootstrap.widgets.TbLabel', array(
+                                        'type'=>'default', // 'success', 'warning', 'important', 'info' or 'inverse'
+                                        'label'=>strtolower($in_skill),
+                                    ));
+                                    echo ' ';
+                                }
+                            }
+                            else
                             {
                                 $this->widget('bootstrap.widgets.TbLabel', array(
-                                    'type'=>'default', // 'success', 'warning', 'important', 'info' or 'inverse'
-                                    'label'=>strtolower($in_skill),
+                                    'type'=>'inverse', // 'success', 'warning', 'important', 'info' or 'inverse'
+                                    'label'=>'N/A',
                                 ));
                                 echo ' ';
                             }
-                        }
-                        else
-                        {
-                            $this->widget('bootstrap.widgets.TbLabel', array(
-                                'type'=>'inverse', // 'success', 'warning', 'important', 'info' or 'inverse'
-                                'label'=>'N/A',
-                            ));
-                            echo ' ';
-                        }
                         ?>
                     </td>
-                    <td><?php echo "StackOverflow"?></td>
+                    <td><a href=<?php echo $result3[$m]->jobURL;?> >
+                        <img src="http://www.userlogos.org/files/logos/pek/stackoverflow2.png" alt="StackOverflow"/>
+                        </a>
+                    </td>
                 </tr>
                 <?php $m++; }
+                //<!--Monster JOBS-->
+                if($n < $sizeMJ && $sizeMJ > 0)
+                {  ?>  
+                <tr>
+                    <td><a href=<?php echo $mjresults[$n]->jobURL;?> title="MonsterJobs"><!--target="_blank"-->
+                        <?php if($mjresults[$n]->title != null) {echo $mjresults[$n]->title;}
+                              else {echo "N/A";}?></a></td>
+                    <td><a href=<?php echo $mjresults[$n]->jobURL;?> title="ClickHere">
+                        <?php if($mjresults[$n]->companyName != null) { echo $mjresults[$n]->companyName;}
+                              else {echo "Company Info";}?></a></td>
+                    <td><?php if($mjresults[$n]->type != null) { echo $mjresults[$n]->type;}
+                              else {echo "N/A";}?></td>
+                    <td><?php if($mjresults[$n]->posted != null) {echo $mjresults[$n]->posted;}
+                              else {echo "N/A";} ?></td>
+<!--                    <td>N/A</td>-->
+                    <td><?php if($mjresults[$n]->pay != null) {echo '<small>'.$mjresults[$n]->pay.'</small>';}
+                              else {echo "N/A";} ?></td>
+                    <td><?php if($mjresults[$n]->skills != null)
+                            {
+                                $in_skill_list = explode(' ', $mjresults[$n]->skills);
+                                $uniqueSkill = array_unique($in_skill_list);
+
+                                foreach ($uniqueSkill as $in_skill)
+                                {
+                                    $this->widget('bootstrap.widgets.TbLabel', array(
+                                        'type'=>'default', // 'success', 'warning', 'important', 'info' or 'inverse'
+                                        'label'=>strtolower($in_skill),
+                                    ));
+                                    echo ' ';
+                                }
+                            }
+                            else
+                            {
+                                $this->widget('bootstrap.widgets.TbLabel', array(
+                                    'type'=>'inverse', // 'success', 'warning', 'important', 'info' or 'inverse'
+                                    'label'=>'N/A',
+                                ));
+                                echo ' ';
+                            }
+                        ?>
+                    </td>
+                    <td><a href=<?php echo $mjresults[$n]->jobURL;?>> 
+                        <img src="http://media.monster.com/mm/usen/my/144x30_monsterBug.gif" alt="MonsterJobs"/></a> 
+                        </td>
+                </tr>
+                <?php $n++; }
                 
                 
                 ?>
