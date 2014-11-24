@@ -1,4 +1,4 @@
-<br>
+
 
 <script>
 function filterUsers(){
@@ -21,8 +21,11 @@ function filterUsers(){
 </script>
 
 <div id="hardcorecontent">
+<?php 
+$srch_keyword = ($_POST['skillkeyword']);
+$this->renderPartial('employerPreSearchResults', $srch_keyword); ?>
 <?php if ($results != null && sizeof($results) > 0) {?>
-<br><br>
+
 <h2>Search Results </h2>
  
 <table class="jobtable">
@@ -35,13 +38,12 @@ function filterUsers(){
 	<td class="info"><a href="/JobFair/index.php/profile/student/user/<?php echo $js->username;?>"><?php echo $js->username;?></a></td>
 	<td><?php echo $js->first_name . " " . $js->last_name;?></td>
 
-
 	<td><?php 
 	$educ = Education::model()->findByAttributes(array('FK_user_id'=>$js->id));
 	$school = "";
 	if($educ)
 	{
-		$school = School::model()->findByAttributes(array('id'=>$educ->FK_school_id))->name;
+            $school = School::model()->findByAttributes(array('id'=>$educ->FK_school_id))->name;
 	}
 	echo $school;
 	?></td>	

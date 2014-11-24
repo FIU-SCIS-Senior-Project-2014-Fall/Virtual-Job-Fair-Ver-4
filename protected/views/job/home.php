@@ -224,7 +224,7 @@ function getURLParameter(name) {
                             'id'=>'tagName',
                             'value'=> $_GET['tagName'],
                             'htmlOptions'=>array('value'=> $_GET['tagName'],
-                                'style'=>'width: 200px;'),)); ?>
+                            'style'=>'width: 200px;'),)); ?>
                         <br>
                         <strong>Remember to check profile settings to set preference. </strong>
                         <div id="alertEmpty" class="alert alert-error">
@@ -259,6 +259,15 @@ function getURLParameter(name) {
 
 <!-- ----------------- SEARCH RESULTS --------------------- -->
  <div id ="jobcontent">
+ <?php
+ if(isset($_GET['keyword']))
+    {
+        $keyword = ($_GET['keyword']);
+        if($keyword != null && sizeof($keyword) > 0)
+        {
+            $this->renderPartial('studentPreSearchQtn', $keyword);
+        }
+    }?>    
  <?php if (isset($flag) && $flag == 2) { ?>
     <!-- ******* Job Postings from Job Page using external sources & Career Path *******  -->
     <table class="display" id="jobtable" style="max-width: 120%; width:100%">

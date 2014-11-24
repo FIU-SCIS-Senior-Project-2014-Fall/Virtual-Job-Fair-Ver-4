@@ -179,11 +179,10 @@ class JobController extends Controller
     {
         require_once 'protected/monster/monsterJobs.php';
         $r = monster\monsterJobs::getJobResults($query, $city);
-        return $r;
-        
+        return $r;        
     }
-
-
+    
+    
     // call to indeed API
     public function indeed($query, $city)
     {

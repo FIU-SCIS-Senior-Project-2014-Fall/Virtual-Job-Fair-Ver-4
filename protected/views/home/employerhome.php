@@ -13,12 +13,12 @@ $(function() {
 	var x;
 		setInterval(function() {
 				if(x == 0) {
-					$('.blinking').removeAttr('style');
-					x = 1;
+				$('.blinking').removeAttr('style');
+				x = 1;
 				} else  {
 					if(x = 1) {
-						$('.blinking').css('color', 'red');
-						x = 0;
+					$('.blinking').css('color', 'red');
+					x = 0;
 					}
 				}
 		}, 500);
@@ -44,21 +44,22 @@ $(function() {
 		
 		<ul id="jobs">
 		
-			<?php foreach ($user->jobs as $job) {?>
+			<?php foreach ($user->jobs as $job) 
+                            {?>
 				
-							<?php  $countapp = 0;
-							$apps= $job->applications;
-							//print "<pre>"; print_r($apps);print "</pre>";return;
-							if($apps != null){
-								foreach ($apps as $app) {
-									$auser= User::model()->findByAttributes(array('id' => $app->userid));
-									$countapp++;
-								}
-							}
-							?>
+                                <?php  $countapp = 0;
+                                $apps= $job->applications;
+                                //print "<pre>"; print_r($apps);print "</pre>";return;
+                                if($apps != null){
+                                        foreach ($apps as $app) {
+                                                $auser= User::model()->findByAttributes(array('id' => $app->userid));
+                                                $countapp++;
+                                        }
+                                }
+                                ?>
 				
-				  <li class="eachjob">
-				    <span class="menuBox"><a href="#" class="ajob" ><?php echo $job->title?> <span style="float:right; font-size: 10pt;
+				<li class="eachjob">
+				  <span class="menuBox"><a href="#" class="ajob" ><?php echo $job->title?> <span style="float:right; font-size: 10pt;
 margin-right: 10px;
 color: rgb(129, 126, 126);">Applied: <?php echo $countapp?> candidates</span></a></span>
 				    <div class="jobinfo" id="jobinfo">

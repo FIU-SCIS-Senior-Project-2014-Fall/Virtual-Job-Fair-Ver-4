@@ -59,13 +59,13 @@ if (!isset($_GET['keyword'])) {
 	} else if (User::isCurrentUserEmployer(Yii::app()->user->name)) {
 		$home = '/home/employerhome';
 		$search = '<form class="navbar-search pull-left" method="post" action="/JobFair/index.php/home/employersearch" >'
-					. $this->widget('zii.widgets.jui.CJuiAutoComplete',array(
-		    		'name'=>'skillkeyword',
-					'source'=>Skillset::getNames(),
-		    		'htmlOptions'=>array('class'=>'search-query span2','placeholder'=>'Search Students by Skill'
-		    	),
-			), true
-		).
+				. $this->widget('zii.widgets.jui.CJuiAutoComplete',
+                                                array(
+                                                'name'=>'skillkeyword',
+                                                'source'=>Skillset::getNames(),
+                                                'htmlOptions'=>array('class'=>'search-query span2','placeholder'=>'Search Students by Skill'),
+                                                ), 
+                                                true).
 		    		'<button type="submit" style="background-color:transparent ; border:0"  >
 		<img src="/JobFair/images/ico/Search-icon.png"  height="25" width="25" style="margin:1px 0 0 5px"></button>
 		</form>';

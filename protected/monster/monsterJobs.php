@@ -3,20 +3,7 @@
 namespace monster;
 class monsterJobs 
 {
-    //public static $url = "http://careers.stackoverflow.com/jobs/feed?location=Miami%2c+Florida&range=300&distanceUnits=Miles";
-//    public static function getJobCount($keywords, $location)
-//    {
-//        $location = urlencode($location);
-//        $keywords = urlencode($keywords);
-//        $url = "http://careers.stackoverflow.com/jobs/feed?searchTerm=$keywords&location=$location&range=300&distanceUnits=Miles&allowsremote=true";
-//        //$url = StackOverflow::$url;
-//        //$url = "http://careers.stackoverflow.com/jobs/feed?location=Miami%2c+Florida&range=300&distanceUnits=Miles";
-//        //$xml = simplexml_load_file($url);
-//        try {$xml = simplexml_load_file($url);}
-//        catch(Exception $e){print_r($e);}
-//        $count = (int)$xml->channel->children('os', true)->totalResults;
-//        return $count;
-//    }
+    
     public static function getJobResults($keywords, $location)
     {        
         //$url = "http://rss.jobsearch.monster.com/rssquery.ashx?q=Computer%20Software,$keywords&rad_units=miles&brd=5&cy=US&pp=50&sort=rv.di.dt&geo=$location,32.18688,,,376&baseurl=jobview.monster.com";
@@ -35,10 +22,6 @@ class monsterJobs
             //$title = $item->title;
             $description = (string)$item->description;
             //var_dump($description);die;
-//            $skills = $item->category;
-//            $position = strstr($title,"at",true);            
-//            $tempStr = substr($title, strpos($title,"at")+1);
-//            $company = substr($tempStr,1, strpos($tempStr, " (")-1);
             $currJob->title = (string)$item->title;  //position
             $currJob->companyName = "";      // not available
             $currJob->jobURL = (string)$item->link; //link to the job

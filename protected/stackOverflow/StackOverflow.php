@@ -23,7 +23,7 @@ class StackOverflow
         //$url = "http://careers.stackoverflow.com/jobs/feed?location=Miami%2c+Florida&range=300&distanceUnits=Miles";
         $location = urlencode($location);
         $keywords = urlencode($keywords);
-        $url = "http://careers.stackoverflow.com/jobs/feed?searchTerm=$keywords&location=$location&range=300&distanceUnits=Miles&allowsremote=true";
+        $url = "http://careers.stackoverflow.com/jobs/feed?searchTerm=$keywords&location=$location&range=150&distanceUnits=Miles&allowsremote=true";
         $xml = simplexml_load_file($url);
         $jobsCollection = Array();
         $currItem = 1;

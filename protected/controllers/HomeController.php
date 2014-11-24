@@ -92,45 +92,41 @@ class HomeController extends Controller
 
 	public function actionEmployerHome()
 	{
-		$username = Yii::app()->user->name;
-		$user = User::model()->find("username=:username",array(':username'=>$username)); // pass user
-		$notification = Notification::model()->getNotificationId($user->id); // pass the notifications
-		$univs = School::getAllSchools(); // pass universities
-		$skills = Skillset::getNames(); // pass skills
-		
-		
-		
-		
-		$countvideo = 0;
-		$countapplicants = 0;
-		$countmessages = 0;
-		$countcandidates =0;
-		foreach ($notification as $n) {
-			if ($n->importancy == 4 & $n->been_read == 0 ) {
-			$countvideo++;		
-			$key = VideoInterview::model()->findByAttributes(array('notification_id' => $n->id));
-			if($key != null){
-			$n->keyid = $key->session_key;
-			//print "<pre>"; print_r($key);print "</pre>";return;
-			}
-			}
-			else if ($n->importancy == 4 & $n->been_read != 0 ) {
-				//$countvideo++;
-				$key = VideoInterview::model()->findByAttributes(array('notification_id' => $n->id));
-				if($key != null){
-					$n->keyid = $key->session_key;
-					//print "<pre>"; print_r($key);print "</pre>";return;
-				}
-			}
-			elseif($n->importancy == 6 & $n->been_read == 0)
-			$countapplicants++;			
-			elseif ($n->importancy == 3 & $n->been_read == 0)	
-			$countmessages++;
-			elseif ($n->importancy == 5 & $n->been_read == 0)
-			$countcandidates++;
-		}		
+            $username = Yii::app()->user->name;
+            $user = User::model()->find("username=:username",array(':username'=>$username)); // pass user
+            $notification = Notification::model()->getNotificationId($user->id); // pass the notifications
+            $univs = School::getAllSchools(); // pass universities
+            $skills = Skillset::getNames(); // pass skills
+            $countvideo = 0;
+            $countapplicants = 0;
+            $countmessages = 0;
+            $countcandidates =0;
+            foreach ($notification as $n) {
+                    if ($n->importancy == 4 & $n->been_read == 0 ) {
+                    $countvideo++;		
+                    $key = VideoInterview::model()->findByAttributes(array('notification_id' => $n->id));
+                    if($key != null){
+                    $n->keyid = $key->session_key;
+                    //print "<pre>"; print_r($key);print "</pre>";return;
+                    }
+                    }
+                    else if ($n->importancy == 4 & $n->been_read != 0 ) {
+                            //$countvideo++;
+                            $key = VideoInterview::model()->findByAttributes(array('notification_id' => $n->id));
+                            if($key != null){
+                                    $n->keyid = $key->session_key;
+                                    //print "<pre>"; print_r($key);print "</pre>";return;
+                            }
+                    }
+                    elseif($n->importancy == 6 & $n->been_read == 0)
+                    $countapplicants++;			
+                    elseif ($n->importancy == 3 & $n->been_read == 0)	
+                    $countmessages++;
+                    elseif ($n->importancy == 5 & $n->been_read == 0)
+                    $countcandidates++;
+            }		
 
-		$this->render('employerhome', array('user'=>$user,'universities'=>$univs,'skills'=>$skills, 'notification'=>$notification, 'countvideo'=>$countvideo, 'countapplicants'=>$countapplicants, 'countmessages'=>$countmessages, 'countcndidates'=>$countcandidates ));
+            $this->render('employerhome', array('user'=>$user,'universities'=>$univs,'skills'=>$skills, 'notification'=>$notification, 'countvideo'=>$countvideo, 'countapplicants'=>$countapplicants, 'countmessages'=>$countmessages, 'countcndidates'=>$countcandidates ));
 	}
 	
 	public function actionAdminHome()
@@ -154,12 +150,12 @@ class HomeController extends Controller
 	public function accessRules()
 	{
 		return array(
-				array('allow',  // allow authenticated users to perform these actions
-						'actions'=>array('NotificationAdmin', 'StudentHome', 'MergeSkills', 'AddSkill', 'EmployerHome', 'Search', 'Search2','Employersearch', 'New', 'Hello', 'AdminHome', 'adminsearch', 'DisableUser', 'EnableUser', 'DeleteJob', 'DeleteNotification', 'AcceptNotificationSchedualInterview', 'CareerPathSync'),
-						'users'=>array('@')),
-				array('deny', //deny all users anything not specified
-						'users'=>array('*'),
-						'message'=>'Access Denied. Site is unbreakable'),
+                            array('allow',  // allow authenticated users to perform these actions
+                                'actions'=>array('NotificationAdmin', 'StudentHome', 'MergeSkills', 'AddSkill', 'EmployerHome', 'Search', 'Search2','StudentQuestionSearch','EmpQuestionSearch','Employersearch', 'New', 'Hello', 'AdminHome', 'adminsearch', 'DisableUser', 'EnableUser', 'DeleteJob', 'DeleteNotification', 'AcceptNotificationSchedualInterview', 'CareerPathSync'),
+                                'users'=>array('@')),
+                            array('deny', //deny all users anything not specified
+                                'users'=>array('*'),
+                                'message'=>'Access Denied. Site is unbreakable'),
 		);
 	}
 
@@ -183,10 +179,40 @@ class HomeController extends Controller
 				),
 		);
 	}
+        
+        public function actionEmpQuestionSearch()
+        {
+            //Employer enters a skill in nav-search bar
+            $srch_keyword = ($_POST['skillkeyword']);
+            $this->render('employerPreSearchResults', array('srch_keyword'=>$srch_keyword));
+//            $pieces = trim($srch_keyword);
+//            $pieces = explode(" ", $pieces); // split words to search
+//            $count = sizeof($pieces); // get number of word to search
+//            $query = '';
+//            for($i = 0; $i<$count; $i++) // prepare query
+//            {
+//                if ($i == $count - 1){
+//                    $query = $query.'name like \'%'.$pieces[$i].'%\'';
+//                } else {
+//                    $query = $query.'name like \'%'.$pieces[$i].'%\' OR ';
+//                }
+//            }
+//            $criteria = new CDbCriteria;
+//            $criteria->condition = $query;
+//            $results = Array();
+//            if ($srch_keyword != null)
+//            {
+//                $this->render('employerPreSearchResults', array('keyword'=>$srch_keyword));
+//            }            
+        }
 
 	public function actionEmployersearch()
 	{
             $srch_keyword = ($_POST['skillkeyword']); // Get skill keyword to search
+//            echo 'Does skill '.$srch_keyword.' relates to your Mama ??? :)';
+//            echo CHtml::button($labelYes='YES');
+//            echo CHtml::button($labelNO='NO');
+
             $pieces = trim($srch_keyword);
             $pieces = explode(" ", $pieces); // split words to search
             $count = sizeof($pieces); // get number of word to search
@@ -199,12 +225,13 @@ class HomeController extends Controller
                     $query = $query.'name like \'%'.$pieces[$i].'%\' OR ';
                 }
             }
-
+            
             $criteria = new CDbCriteria;
             $criteria->condition = $query;
             $results = Array();
 
-            if ($srch_keyword != null){
+            if ($srch_keyword != null)
+            {                
                 $skillsArray = Skillset::model()->findAll($criteria);
                 foreach ($skillsArray as $sk)
                 {
@@ -218,7 +245,7 @@ class HomeController extends Controller
                                 }
                             }
                         }
-                        if ($duplicate == 0){
+                        if($duplicate == 0){
                             $results[] = User::model()->findByAttributes(array('id'=>$tmp->userid));
                         }
                     }
@@ -250,15 +277,19 @@ class HomeController extends Controller
             $user = User::model()->find("username=:username",array(':username'=>$username)); // pass user
             $skills = Skillset::getNames(); // pass skills
             $universites = School::getAllSchools(); // pass companies
-
             // 		foreach ($results as $tr){
             // 			print "<pre>"; print_r($tr->attributes);print "</pre>";
             // 		}
             // 		return;
-
-            $this->render('employerSearchResults', array('results'=>$results, 'skills'=>$skills, 'universities'=>$universites, 'user'=>$user));
-
+            
+            $this->render('employerSearchResults', array('results'=>$results, 'skills'=>$skills, 'universities'=>$universites, 'user'=>$user));            
 	}
+        
+        public function actionStudentQuestionSearch()
+        {
+            $keyword = ($_GET['keyword']);
+            $this->render('studentPreSearchQtn', array('keyword'=>$keyword));
+        }
 
 	public function actionSearch2()
 	{
@@ -321,8 +352,7 @@ class HomeController extends Controller
             $skills = Skillset::getNames(); // pass skills
             $companies = CompanyInfo::getNames(); // pass companies
 
-            $this->render('studentSearchResults',array('results'=>$results,'user'=>$user,'companies'=>$companies,'skills'=>$skills,));
-	
+            $this->render('studentSearchResults',array('results'=>$results,'user'=>$user,'companies'=>$companies,'skills'=>$skills,));	
 	}
 	
 	
@@ -341,7 +371,6 @@ class HomeController extends Controller
                 } else {
                         $query = $query.'name like \'%'.$pieces[$i].'%\' OR ';
                 }
-
             }
 
             $criteria = new CDbCriteria;
@@ -420,7 +449,7 @@ class HomeController extends Controller
         $companies = CompanyInfo::getNames(); // pass companies
 
         $this->render('home',array('flag'=>$flag, 'results'=>$results,'user'=>$user,'companies'=>$companies,'skills'=>$skills,));
-		//$this->render('studentSearchResults',array('results'=>$results,'user'=>$user,'companies'=>$companies,'skills'=>$skills,));
+        //$this->render('studentSearchResults',array('results'=>$results,'user'=>$user,'companies'=>$companies,'skills'=>$skills,));
 
 	}
  
@@ -550,7 +579,7 @@ class HomeController extends Controller
 		$message = "$username just accepted your interview invitation.";
 		$recive = User::model()->findByPk($modle->sender_id);
 		//$html = User::replaceMessage($recive->username, $message);
-        User::sendEmail($recive->email, "Virtual Job Fair", "Interview Schedule Accepted", $message);
+                User::sendEmail($recive->email, "Virtual Job Fair", "Interview Schedule Accepted", $message);
 		//User::sendEmailEmployerAcceptingInterviewNotificationAlart($recive->email, $recive->username, $username, $message);
 		if ($user->FK_usertype == 1)
 		$this->redirect("/JobFair/index.php/home/studenthome");

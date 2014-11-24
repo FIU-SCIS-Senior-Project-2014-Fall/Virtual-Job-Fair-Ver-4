@@ -1,9 +1,12 @@
 <br>
 <br>
 <br>
+<?php 
+$keyword = ($_GET['keyword']);
+$this->renderPartial('studentPreSearchQtn', $keyword); ?>
 <!--NOT NEEDED -->
 <div id="hardcorecontent">
-
+    
 <?php if ($results != null & sizeof($results) > 0) {?>
 <h2>Search Results</h2>
 <table class="jobtable">
