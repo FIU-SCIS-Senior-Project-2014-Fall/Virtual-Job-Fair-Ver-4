@@ -4,33 +4,32 @@ $saveQuery = "";
 
 class JobController extends Controller
 {
-
-	private function isExpired($job){
-		if (strtotime($job->deadline) < (strtotime("-1 day",strtotime("now")))){
-			return true;
-		} else {
-			return false;
-		}
+	private function isExpired($job)
+        {
+            if (strtotime($job->deadline) < (strtotime("-1 day",strtotime("now")))){
+                    return true;
+            } else {
+                    return false;
+            }
 	}
 
 	public function actionView($jobid)
 	{
-		$job = Job::model()->findByPk($jobid);		
-		
-		//foreach ($skills->skillset as $skillset) {
-			
-		//}
-		if ($this->isExpired($job)){
-			$job->active = 0;
-			$job->save();
-		}
-		
-		if ($job == null) {
-			$this->render('JobInvalid');
-		} else {
-			$this->render('View', array('job' => $job));
-		}
-		
+            $job = Job::model()->findByPk($jobid);		
+
+            //foreach ($skills->skillset as $skillset) {
+
+            //}
+            if ($this->isExpired($job)){
+                    $job->active = 0;
+                    $job->save();
+            }
+
+            if ($job == null) {
+                    $this->render('JobInvalid');
+            } else {
+                    $this->render('View', array('job' => $job));
+            }		
 	}
 	
 	public function actionHome($allWords = null, $phrase = null, $anyWord = null, 

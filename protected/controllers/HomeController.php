@@ -3,19 +3,7 @@
 class HomeController extends Controller
 {
 	public function actionStudentHome()
-	{    
-            //$url = "http://careers.stackoverflow.com/jobs/feed?searchTerm=$keywords&location=$location&range=300&distanceUnits=Miles&allowsremote=true";
-            //$xml = simplexml_load_file($url);
-            //$os = "http://a9.com/-/spec/opensearch/1.1/";
-            //$xml->registerXPathNamespace('os','http://a9.com/-/spec/opensearch/1.1/');
-            //$nodes = $xml->xpath('os:totalResults');
-            //$count = $nodes[0];
-            //$count = (int)$xml->channel->children('os', true)->totalResults;
-            //var_dump($count);
-//            $skillset = Skillset::getNames();
-//            foreach($skillset as $s){
-//            echo $s." ";}
-            
+	{                        
             /////////////////////////////////////////////////////////////////
                 $username = Yii::app()->user->name;
 		$user = User::model()->find("username=:username",array(':username'=>$username)); // pass the user
@@ -39,11 +27,11 @@ class HomeController extends Controller
 		$i = 0;
 		
 		foreach ($skillids as $sk){
-			$most_wanted_skills[] = Skillset::model()->findByAttributes(array('id'=>$sk->skillid));
-			$i++;
-			if ($i == 5){
-				break;
-			}
+                    $most_wanted_skills[] = Skillset::model()->findByAttributes(array('id'=>$sk->skillid));
+                    $i++;
+                    if ($i == 5){
+                            break;
+                    }
 		}		
 		
 		$countvideo = 0;
@@ -51,29 +39,29 @@ class HomeController extends Controller
 		$countmessages = 0;
 		$countmisc =0;
 		foreach ($notification as $n) {
-                        if ($n->importancy == 4 & $n->been_read == 0 ) {
-			$countvideo++;		
-			$key = VideoInterview::model()->findByAttributes(array('notification_id' => ($n->id + 1)));
-			if($key != null){
-			$n->keyid = $key->session_key;
-			
-			}
-			//print "<pre>"; print_r($key);print "</pre>";return;
-			}
-			else if ($n->importancy == 4 & $n->been_read != 0 ) {
-				//$countvideo++;
-				$key = VideoInterview::model()->findByAttributes(array('notification_id' => ($n->id + 1)));
-				if($key != null){
-					$n->keyid = $key->session_key;
-					//print "<pre>"; print_r($key);print "</pre>";return;
-				}
-			}
-			elseif($n->importancy == 2 & $n->been_read == 0)
-			$countmachingjobs++;
-			elseif ($n->importancy == 3 & $n->been_read == 0)	
-			$countmessages++;
-			elseif ($n->importancy == 1 & $n->been_read == 0)
-			$countmisc++;
+                    if ($n->importancy == 4 & $n->been_read == 0 ) {
+                        $countvideo++;		
+                        $key = VideoInterview::model()->findByAttributes(array('notification_id' => ($n->id + 1)));
+                        if($key != null){
+                        $n->keyid = $key->session_key;
+
+                        }
+                        //print "<pre>"; print_r($key);print "</pre>";return;
+                    }
+                    else if ($n->importancy == 4 & $n->been_read != 0 ) {
+                        //$countvideo++;
+                        $key = VideoInterview::model()->findByAttributes(array('notification_id' => ($n->id + 1)));
+                        if($key != null){
+                                $n->keyid = $key->session_key;
+                                //print "<pre>"; print_r($key);print "</pre>";return;
+                        }
+                    }
+                    elseif($n->importancy == 2 & $n->been_read == 0)
+                    $countmachingjobs++;
+                    elseif ($n->importancy == 3 & $n->been_read == 0)	
+                    $countmessages++;
+                    elseif ($n->importancy == 1 & $n->been_read == 0)
+                    $countmisc++;
 		}		
 		
 		
@@ -82,13 +70,12 @@ class HomeController extends Controller
 	}
 	
 	public function actionNew(){
-		$this->render('vid');
+            $this->render('vid');
 	}
 	
 	public function actionHello(){
-		$this->render('newfile1');
-	}
-	
+            $this->render('newfile1');
+	}	
 
 	public function actionEmployerHome()
 	{
@@ -102,28 +89,28 @@ class HomeController extends Controller
             $countmessages = 0;
             $countcandidates =0;
             foreach ($notification as $n) {
-                    if ($n->importancy == 4 & $n->been_read == 0 ) {
-                    $countvideo++;		
+                if ($n->importancy == 4 & $n->been_read == 0 ) {
+                $countvideo++;		
+                $key = VideoInterview::model()->findByAttributes(array('notification_id' => $n->id));
+                if($key != null){
+                $n->keyid = $key->session_key;
+                //print "<pre>"; print_r($key);print "</pre>";return;
+                }
+                }
+                else if ($n->importancy == 4 & $n->been_read != 0 ) {
+                    //$countvideo++;
                     $key = VideoInterview::model()->findByAttributes(array('notification_id' => $n->id));
                     if($key != null){
-                    $n->keyid = $key->session_key;
-                    //print "<pre>"; print_r($key);print "</pre>";return;
+                        $n->keyid = $key->session_key;
+                        //print "<pre>"; print_r($key);print "</pre>";return;
                     }
-                    }
-                    else if ($n->importancy == 4 & $n->been_read != 0 ) {
-                            //$countvideo++;
-                            $key = VideoInterview::model()->findByAttributes(array('notification_id' => $n->id));
-                            if($key != null){
-                                    $n->keyid = $key->session_key;
-                                    //print "<pre>"; print_r($key);print "</pre>";return;
-                            }
-                    }
-                    elseif($n->importancy == 6 & $n->been_read == 0)
-                    $countapplicants++;			
-                    elseif ($n->importancy == 3 & $n->been_read == 0)	
-                    $countmessages++;
-                    elseif ($n->importancy == 5 & $n->been_read == 0)
-                    $countcandidates++;
+                }
+                elseif($n->importancy == 6 & $n->been_read == 0)
+                $countapplicants++;			
+                elseif ($n->importancy == 3 & $n->been_read == 0)	
+                $countmessages++;
+                elseif ($n->importancy == 5 & $n->been_read == 0)
+                $countcandidates++;
             }		
 
             $this->render('employerhome', array('user'=>$user,'universities'=>$univs,'skills'=>$skills, 'notification'=>$notification, 'countvideo'=>$countvideo, 'countapplicants'=>$countapplicants, 'countmessages'=>$countmessages, 'countcndidates'=>$countcandidates ));
@@ -149,70 +136,38 @@ class HomeController extends Controller
 	
 	public function accessRules()
 	{
-		return array(
-                            array('allow',  // allow authenticated users to perform these actions
-                                'actions'=>array('NotificationAdmin', 'StudentHome', 'MergeSkills', 'AddSkill', 'EmployerHome', 'Search', 'Search2','StudentQuestionSearch','EmpQuestionSearch','Employersearch', 'New', 'Hello', 'AdminHome', 'adminsearch', 'DisableUser', 'EnableUser', 'DeleteJob', 'DeleteNotification', 'AcceptNotificationSchedualInterview', 'CareerPathSync'),
-                                'users'=>array('@')),
-                            array('deny', //deny all users anything not specified
-                                'users'=>array('*'),
-                                'message'=>'Access Denied. Site is unbreakable'),
-		);
+            return array(
+                array('allow',  // allow authenticated users to perform these actions
+                    'actions'=>array('NotificationAdmin', 'StudentHome', 'MergeSkills', 'AddSkill', 'EmployerHome', 'Search', 'Search2','Employersearch', 'New', 'Hello', 'AdminHome', 'adminsearch', 'DisableUser', 'EnableUser', 'DeleteJob', 'DeleteNotification', 'AcceptNotificationSchedualInterview', 'CareerPathSync'),
+                    'users'=>array('@')),
+                array('deny', //deny all users anything not specified
+                    'users'=>array('*'),
+                    'message'=>'Access Denied. Site is unbreakable'),
+            );
 	}
 
 
 	public function filters()
 	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-				'accessControl',
-		);
+            // return the filter configuration for this controller, e.g.:
+            return array('accessControl',);
 	}
 
 	public function actions()
 	{
-		// return external action classes, e.g.:
-		return array(
-				'action1'=>'path.to.ActionClass',
-				'action2'=>array(
-						'class'=>'path.to.AnotherActionClass',
-						'propertyName'=>'propertyValue',
-				),
-		);
+            // return external action classes, e.g.:
+            return array(
+                            'action1'=>'path.to.ActionClass',
+                            'action2'=>array(
+                                            'class'=>'path.to.AnotherActionClass',
+                                            'propertyName'=>'propertyValue',
+                            ),
+            );
 	}
         
-        public function actionEmpQuestionSearch()
-        {
-            //Employer enters a skill in nav-search bar
-            $srch_keyword = ($_POST['skillkeyword']);
-            $this->render('employerPreSearchResults', array('srch_keyword'=>$srch_keyword));
-//            $pieces = trim($srch_keyword);
-//            $pieces = explode(" ", $pieces); // split words to search
-//            $count = sizeof($pieces); // get number of word to search
-//            $query = '';
-//            for($i = 0; $i<$count; $i++) // prepare query
-//            {
-//                if ($i == $count - 1){
-//                    $query = $query.'name like \'%'.$pieces[$i].'%\'';
-//                } else {
-//                    $query = $query.'name like \'%'.$pieces[$i].'%\' OR ';
-//                }
-//            }
-//            $criteria = new CDbCriteria;
-//            $criteria->condition = $query;
-//            $results = Array();
-//            if ($srch_keyword != null)
-//            {
-//                $this->render('employerPreSearchResults', array('keyword'=>$srch_keyword));
-//            }            
-        }
-
 	public function actionEmployersearch()
 	{
             $srch_keyword = ($_POST['skillkeyword']); // Get skill keyword to search
-//            echo 'Does skill '.$srch_keyword.' relates to your Mama ??? :)';
-//            echo CHtml::button($labelYes='YES');
-//            echo CHtml::button($labelNO='NO');
-
             $pieces = trim($srch_keyword);
             $pieces = explode(" ", $pieces); // split words to search
             $count = sizeof($pieces); // get number of word to search
@@ -220,12 +175,11 @@ class HomeController extends Controller
             for($i = 0; $i<$count; $i++) // prepare query
             {
                 if ($i == $count - 1){
-                    $query = $query.'name like \'%'.$pieces[$i].'%\'';
+                    $query = $query.'name like \'%'.$pieces[$i].'%\'';                    
                 } else {
                     $query = $query.'name like \'%'.$pieces[$i].'%\' OR ';
                 }
-            }
-            
+            }            
             $criteria = new CDbCriteria;
             $criteria->condition = $query;
             $results = Array();
@@ -233,6 +187,18 @@ class HomeController extends Controller
             if ($srch_keyword != null)
             {                
                 $skillsArray = Skillset::model()->findAll($criteria);
+                $gen_skill ='';               
+                foreach($skillsArray as $s)
+                {
+                    $gen_skill = "SELECT * FROM skillset WHERE FK_general_skills IN "
+                                . "(SELECT FK_general_skills FROM skillset WHERE name = '".$s->name."')";
+                    $skillsArray1 = Skillset::model()->findAllBySql($gen_skill);
+                    foreach($skillsArray1 as $sk)
+                    {
+                        $skillsArray[]= $sk;
+                    }
+                }
+                //var_dump($skillsArray);die;              
                 foreach ($skillsArray as $sk)
                 {
                     $student_ids = StudentSkillMap::model()->findAllByAttributes(array('skillid'=>$sk->id)); // search student skill map for students with that skill
@@ -283,14 +249,9 @@ class HomeController extends Controller
             // 		return;
             
             $this->render('employerSearchResults', array('results'=>$results, 'skills'=>$skills, 'universities'=>$universites, 'user'=>$user));            
-	}
-        
-        public function actionStudentQuestionSearch()
-        {
-            $keyword = ($_GET['keyword']);
-            $this->render('studentPreSearchQtn', array('keyword'=>$keyword));
-        }
+	}        
 
+        //students searching for jobs
 	public function actionSearch2()
 	{
             $keyword = ($_GET['key']); // Get words to search

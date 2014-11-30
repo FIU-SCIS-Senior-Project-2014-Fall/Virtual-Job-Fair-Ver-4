@@ -1,9 +1,9 @@
 <br>
 <br>
 <br>
-<?php 
-$keyword = ($_GET['keyword']);
-$this->renderPartial('studentPreSearchQtn', $keyword); ?>
+//<?php 
+//$keyword = ($_GET['keyword']);
+//$this->renderPartial('studentPreSearchQtn', $keyword); ?>
 <!--NOT NEEDED -->
 <div id="hardcorecontent">
     

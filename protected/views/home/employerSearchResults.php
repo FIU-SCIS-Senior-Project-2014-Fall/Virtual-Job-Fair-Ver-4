@@ -21,9 +21,7 @@ function filterUsers(){
 </script>
 
 <div id="hardcorecontent">
-<?php 
-$srch_keyword = ($_POST['skillkeyword']);
-$this->renderPartial('employerPreSearchResults', $srch_keyword); ?>
+
 <?php if ($results != null && sizeof($results) > 0) {?>
 
 <h2>Search Results </h2>
