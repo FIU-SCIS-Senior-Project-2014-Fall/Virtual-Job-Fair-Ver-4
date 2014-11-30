@@ -81,8 +81,9 @@ class JobController extends Controller
         if(isset($radioOption) && $radioOption != "" && $mi == false)
         {
                         
-            $result = $this->indeed($query, $city);
-            if($result['totalresults'] == 0) {$result = "";}
+//            $result = $this->indeed($query, $city);
+//            if($result['totalresults'] == 0) {$result = "";}
+            $result = "";
             $result2 = $this->careerBuilder($query, $city);            
             if($result2[0] == 0) {$result2 = "";}
             $result3 = $this->stackOverflow($query,$city);
@@ -94,8 +95,11 @@ class JobController extends Controller
         {            
             $result = "";
             $result2 = "";
-            $result3 = $this->stackOverflow($query,$city);
-            $result4 = $this->monsterJobs($query, $city);
+//            $result3 = $this->stackOverflow($query,$city);
+//            $result4 = $this->monsterJobs($query, $city);
+            $result3 = "";
+            $result4 = "";
+            
             $this->render('home', array('jobs'=>$job, 'result'=>$result, 'cbresults'=>$result2,'result3'=>$result3,'mjresults'=>$result4, 'flag'=>$flag));
         }
 	}
@@ -269,11 +273,11 @@ class JobController extends Controller
                         if ($skill)
                         {
                             // append current word (skill) to results snippet (check duplicates)
-                                $cur_skills = strtolower($result['results']['result'][$i]['snippet']);
-                                if (!strstr($cur_skills, $snippet_word))
-                                {
-                                    $result['results']['result'][$i]['snippet'] .= ucfirst($snippet_word) . ' ';
-                                }
+                            $cur_skills = strtolower($result['results']['result'][$i]['snippet']);
+                            if (!strstr($cur_skills, $snippet_word))
+                            {
+                                $result['results']['result'][$i]['snippet'] .= ucfirst($snippet_word) . ' ';
+                            }
                         }
                     }
 
