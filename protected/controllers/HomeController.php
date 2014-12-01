@@ -3,7 +3,12 @@
 class HomeController extends Controller
 {
 	public function actionStudentHome()
-	{                        
+	{ 
+//            $url = "http://jobs.github.com/positions.json?description=java";
+//            $jsondata = file_get_contents($url);
+//            $json = json_decode($jsondata,true);
+//            foreach($json as $job) echo $job['description'];
+            //var_dump($json['title']);
             /////////////////////////////////////////////////////////////////
                 $username = Yii::app()->user->name;
 		$user = User::model()->find("username=:username",array(':username'=>$username)); // pass the user

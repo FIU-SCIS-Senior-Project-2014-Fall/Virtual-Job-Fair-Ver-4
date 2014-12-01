@@ -79,8 +79,7 @@ class JobController extends Controller
 
         // calling indeed function
         if(isset($radioOption) && $radioOption != "" && $mi == false)
-        {
-                        
+        {                        
 //            $result = $this->indeed($query, $city);
 //            if($result['totalresults'] == 0) {$result = "";}
             $result = "";
@@ -88,8 +87,9 @@ class JobController extends Controller
             if($result2[0] == 0) {$result2 = "";}
             $result3 = $this->stackOverflow($query,$city);
             $result4 = $this->monsterJobs($query, $city);
+            $result5 = $this->githubJobs($query, $city);
             // jobs -> careerPath, result -> Indeed, cbresults -> careerBuilder
-            $this->render('home', array('jobs'=>$job,'result'=>$result, 'cbresults'=>$result2, 'result3'=>$result3,'mjresults'=>$result4,'flag'=>$flag));
+            $this->render('home', array('jobs'=>$job,'result'=>$result, 'cbresults'=>$result2, 'result3'=>$result3,'mjresults'=>$result4,'ghresults'=>$result5, 'flag'=>$flag));
         }
         else
         {            
@@ -99,8 +99,9 @@ class JobController extends Controller
 //            $result4 = $this->monsterJobs($query, $city);
             $result3 = "";
             $result4 = "";
+            $result5 = "";
             
-            $this->render('home', array('jobs'=>$job, 'result'=>$result, 'cbresults'=>$result2,'result3'=>$result3,'mjresults'=>$result4, 'flag'=>$flag));
+            $this->render('home', array('jobs'=>$job, 'result'=>$result, 'cbresults'=>$result2,'result3'=>$result3,'mjresults'=>$result4,'ghresults'=>$result5, 'flag'=>$flag));
         }
 	}
 
@@ -175,8 +176,8 @@ class JobController extends Controller
     public function stackOverflow($query, $city)
     {
         require_once 'protected/stackOverflow/StackOverflow.php';
-        $res = stackOverflow\StackOverflow::getJobResults($query, $city);
-        return $res;        
+        $r = stackOverflow\StackOverflow::getJobResults($query, $city);
+        return $r;        
     }
     public function monsterJobs($query, $city)
     {
@@ -184,7 +185,12 @@ class JobController extends Controller
         $r = monster\monsterJobs::getJobResults($query, $city);
         return $r;        
     }
-    
+    public function githubJobs($query, $city)
+    {
+        require_once 'protected/githubJobs/githubJobsapi.php';
+        $r = githubJobs\githubJobsapi::getJobResults($query, $city);
+        return $r;
+    }
     
     // call to indeed API
     public function indeed($query, $city)
@@ -690,6 +696,7 @@ class JobController extends Controller
             //if($result3[0] == 0) {$result3 = "";}
             $loc = "Florida";
             $result4 = $this->monsterJobs($keyword, $loc);
+            $result5 = $this->githubJobs($keyword, "");
         }
 
         // get user
@@ -710,7 +717,7 @@ class JobController extends Controller
         // render search results, user, skills, companies and flag to job/home
 //        $this->render('home',array('result'=>$result, 'cbresults'=>$result2,'jobs'=>$results,'user'=>$user,
 //            'companies'=>$companies,'skills'=>$skills,'flag'=>$flag));
-         $this->render('home',array('result'=>$result, 'cbresults'=>$result2,'result3'=>$result3, 'mjresults'=>$result4,
+         $this->render('home',array('result'=>$result, 'cbresults'=>$result2,'result3'=>$result3, 'mjresults'=>$result4,'ghresults'=>$result5,
                                     'jobs'=>$results,'user'=>$user,'companies'=>$companies,'skills'=>$skills,'flag'=>$flag));
 
     }

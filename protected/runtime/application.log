@@ -7365,3 +7365,154 @@ REQUEST_URI=/JobFair/index.php/job/home?allWords=java&phrase=&anyWord=&minus=&ra
 in C:\wamp\www\JobFair\protected\controllers\JobController.php (276)
 in C:\wamp\www\JobFair\protected\controllers\JobController.php (84)
 in C:\wamp\www\JobFair\index.php (14)
+2014/11/30 21:34:57 [error] [php] Trying to get property of non-object (C:\wamp\www\JobFair\protected\controllers\HomeController.php:9)
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(133): HomeController->runAction()
+#1 C:\wamp\www\JobFair\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\wamp\www\JobFair\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\wamp\www\JobFair\framework\web\filters\CInlineFilter.php(58): HomeController->filterAccessControl()
+#4 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\wamp\www\JobFair\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\wamp\www\JobFair\framework\web\CController.php(265): HomeController->runActionWithFilters()
+#7 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): HomeController->run()
+#8 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\wamp\www\JobFair\index.php(14): CWebApplication->run()
+REQUEST_URI=/JobFair/index.php/home/studenthome
+in C:\wamp\www\JobFair\protected\controllers\HomeController.php (9)
+in C:\wamp\www\JobFair\index.php (14)
+2014/11/30 21:45:35 [error] [php] Undefined index: title (C:\wamp\www\JobFair\protected\controllers\HomeController.php:11)
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(133): HomeController->runAction()
+#1 C:\wamp\www\JobFair\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\wamp\www\JobFair\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\wamp\www\JobFair\framework\web\filters\CInlineFilter.php(58): HomeController->filterAccessControl()
+#4 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\wamp\www\JobFair\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\wamp\www\JobFair\framework\web\CController.php(265): HomeController->runActionWithFilters()
+#7 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): HomeController->run()
+#8 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\wamp\www\JobFair\index.php(14): CWebApplication->run()
+REQUEST_URI=/JobFair/index.php/home/studenthome
+in C:\wamp\www\JobFair\protected\controllers\HomeController.php (11)
+in C:\wamp\www\JobFair\index.php (14)
+2014/11/30 21:47:09 [error] [php] Undefined index: positions (C:\wamp\www\JobFair\protected\controllers\HomeController.php:11)
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(133): HomeController->runAction()
+#1 C:\wamp\www\JobFair\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\wamp\www\JobFair\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\wamp\www\JobFair\framework\web\filters\CInlineFilter.php(58): HomeController->filterAccessControl()
+#4 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\wamp\www\JobFair\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\wamp\www\JobFair\framework\web\CController.php(265): HomeController->runActionWithFilters()
+#7 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): HomeController->run()
+#8 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\wamp\www\JobFair\index.php(14): CWebApplication->run()
+REQUEST_URI=/JobFair/index.php/home/studenthome
+in C:\wamp\www\JobFair\protected\controllers\HomeController.php (11)
+in C:\wamp\www\JobFair\index.php (14)
+2014/11/30 21:48:19 [error] [php] Undefined index: positions (C:\wamp\www\JobFair\protected\controllers\HomeController.php:11)
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(133): HomeController->runAction()
+#1 C:\wamp\www\JobFair\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\wamp\www\JobFair\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\wamp\www\JobFair\framework\web\filters\CInlineFilter.php(58): HomeController->filterAccessControl()
+#4 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\wamp\www\JobFair\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\wamp\www\JobFair\framework\web\CController.php(265): HomeController->runActionWithFilters()
+#7 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): HomeController->run()
+#8 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\wamp\www\JobFair\index.php(14): CWebApplication->run()
+REQUEST_URI=/JobFair/index.php/home/studenthome
+in C:\wamp\www\JobFair\protected\controllers\HomeController.php (11)
+in C:\wamp\www\JobFair\index.php (14)
+2014/11/30 22:31:51 [error] [php] Undefined index: Requirements (C:\wamp\www\JobFair\protected\controllers\HomeController.php:10)
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(133): HomeController->runAction()
+#1 C:\wamp\www\JobFair\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\wamp\www\JobFair\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\wamp\www\JobFair\framework\web\filters\CInlineFilter.php(58): HomeController->filterAccessControl()
+#4 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\wamp\www\JobFair\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\wamp\www\JobFair\framework\web\CController.php(265): HomeController->runActionWithFilters()
+#7 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): HomeController->run()
+#8 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\wamp\www\JobFair\index.php(14): CWebApplication->run()
+REQUEST_URI=/JobFair/index.php/home/studenthome
+in C:\wamp\www\JobFair\protected\controllers\HomeController.php (10)
+in C:\wamp\www\JobFair\index.php (14)
+2014/11/30 22:32:41 [error] [php] Illegal string offset 'Requirements' (C:\wamp\www\JobFair\protected\controllers\HomeController.php:10)
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(133): HomeController->runAction()
+#1 C:\wamp\www\JobFair\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\wamp\www\JobFair\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\wamp\www\JobFair\framework\web\filters\CInlineFilter.php(58): HomeController->filterAccessControl()
+#4 C:\wamp\www\JobFair\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\wamp\www\JobFair\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\wamp\www\JobFair\framework\web\CController.php(265): HomeController->runActionWithFilters()
+#7 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): HomeController->run()
+#8 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\wamp\www\JobFair\index.php(14): CWebApplication->run()
+REQUEST_URI=/JobFair/index.php/home/studenthome
+in C:\wamp\www\JobFair\protected\controllers\HomeController.php (10)
+in C:\wamp\www\JobFair\index.php (14)
+2014/12/01 00:38:31 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "images".' in C:\wamp\www\JobFair\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\CController.php(270): CController->missingAction('images')
+#1 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): CController->run('images')
+#2 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController('job/images/GitH...')
+#3 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\wamp\www\JobFair\index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/JobFair/index.php/job/images/GitHubJobs_logoRZ.gif
+HTTP_REFERER=http://localhost/JobFair/index.php/job/search?keyword=php
+---
+2014/12/01 00:40:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "images".' in C:\wamp\www\JobFair\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\CController.php(270): CController->missingAction('images')
+#1 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): CController->run('images')
+#2 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController('job/images/GitH...')
+#3 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\wamp\www\JobFair\index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/JobFair/index.php/job/images/GitHubJobs_logoRZ.gif
+HTTP_REFERER=http://localhost/JobFair/index.php/job/search?keyword=php
+---
+2014/12/01 00:40:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "images".' in C:\wamp\www\JobFair\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\CController.php(270): CController->missingAction('images')
+#1 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): CController->run('images')
+#2 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController('job/images/GitH...')
+#3 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\wamp\www\JobFair\index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/JobFair/index.php/job/images/GitHubJobs_logoRZ.gif
+HTTP_REFERER=http://localhost/JobFair/index.php/job/search?keyword=php
+---
+2014/12/01 00:41:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "images".' in C:\wamp\www\JobFair\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\CController.php(270): CController->missingAction('images')
+#1 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): CController->run('images')
+#2 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController('job/images/GitH...')
+#3 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\wamp\www\JobFair\index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/JobFair/index.php/job/images/GitHubJobs_logoRZ.gif
+HTTP_REFERER=http://localhost/JobFair/index.php/job/search?keyword=php
+---
+2014/12/01 00:41:59 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "images".' in C:\wamp\www\JobFair\framework\web\CController.php:483
+Stack trace:
+#0 C:\wamp\www\JobFair\framework\web\CController.php(270): CController->missingAction('images')
+#1 C:\wamp\www\JobFair\framework\web\CWebApplication.php(282): CController->run('images')
+#2 C:\wamp\www\JobFair\framework\web\CWebApplication.php(141): CWebApplication->runController('job/images/GitH...')
+#3 C:\wamp\www\JobFair\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\wamp\www\JobFair\index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/JobFair/index.php/job/images/GitHubJobs_logoRZ.gif
+HTTP_REFERER=http://localhost/JobFair/index.php/job/search?keyword=php
+---

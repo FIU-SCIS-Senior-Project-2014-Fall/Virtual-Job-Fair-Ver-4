@@ -19,11 +19,10 @@ class monsterJobs
         foreach($xml->channel->item as $item)
         {
             $currJob = new Job();                                     
-            //$title = $item->title;
             $description = (string)$item->description;
             //var_dump($description);die;
             $currJob->title = (string)$item->title;  //position
-            $currJob->companyName = "";      // not available
+            $currJob->companyName = "";             // not available
             $currJob->jobURL = (string)$item->link; //link to the job
             $pubDate = (string)$item->pubDate;      //opening/posting date
             $currJob->posted = strftime("%m/%d/%Y", strtotime($pubDate));
